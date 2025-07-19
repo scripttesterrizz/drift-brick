@@ -6,7 +6,7 @@ local UserInputService = game:GetService("UserInputService")
 local model = workspace:WaitForChild(player.Name)
 local root = model:WaitForChild("Root")
 
-local assistForce = 20 -- 🔧 small push value!
+local assistForce = 30 -- 🔧 small push value!
 local moveForward = false
 local moveBackward = false
 
