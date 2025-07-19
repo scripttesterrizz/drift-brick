@@ -1,0 +1,38 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local model = workspace:WaitForChild(player.Name)
+local root = model:WaitForChild("Root")
+
+local assistForce = 10 -- 🔧 small push value!
+local moveForward = false
+local moveBackward = false
+
+-- Input handling
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.W then moveForward = true end
+    if input.KeyCode == Enum.KeyCode.S then moveBackward = true end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.W then moveForward = false end
+    if input.KeyCode == Enum.KeyCode.S then moveBackward = false end
+end)
+
+-- Gentle assist loop
+RunService.Heartbeat:Connect(function(dt)
+    if not root then return end
+
+    local direction = Vector3.zero
+    if moveForward then
+        direction = root.CFrame.LookVector * assistForce
+    elseif moveBackward then
+        direction = -root.CFrame.LookVector * assistForce
+    end
+
+    -- Light push instead of replacing velocity
+    root.Velocity = root.Velocity + (direction * dt)
+end)
